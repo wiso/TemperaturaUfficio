@@ -41,16 +41,20 @@ jobs:
       - name: Install Python Packages
         run: python -m pip install -r requirements.txt
       - name: Produce Plot
-        run: src/plot.py
+        run: |
+          mkdir _site
+          src/plot.py
+          mv plot.html _site
       - name: Produce Pages
-        run: src/render.py
+        run: |
+          src/render.py
+          mv index.html _site
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          # Upload entire repository
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
