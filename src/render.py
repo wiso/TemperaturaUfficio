@@ -5,7 +5,7 @@ import datetime
 
 env = Environment(loader=FileSystemLoader("templates"), autoescape=select_autoescape())
 
-template = env.get_template("index_template.html")
+template = env.get_template("index.html")
 
 today = datetime.datetime.today()
 html = template.render(the="variables", today="%s" % today)
