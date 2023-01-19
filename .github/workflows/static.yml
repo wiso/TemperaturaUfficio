@@ -60,7 +60,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          name: static_website
           path: "_site"
           if-no-files-found: error
           retention-days: 5
