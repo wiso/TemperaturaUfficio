@@ -11,9 +11,12 @@ template = env.get_template("index.html")
 today = datetime.datetime.today()
 triggered_by = os.environ.get("GITHUB_EVENT_NAME")
 if triggered_by == "push":
-    triggered_by = "push on gitlab on branch %s" % os.environ["GITHUB_REF_NAME"]
+    triggered_by = "push on gitlab"
+elif triggered_by == "repository_dispatch":
+    triggered_by = "new data"
+
 html = template.render(
-    today="%s" % today.strftime("%d %m %Y"),
+    today="%s" % today.strftime("%d/%m/%Y"),
     triggered_by=triggered_by,
     branch=os.environ.get("GITHUB_REF_NAME"),
 )
