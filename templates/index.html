@@ -16,7 +16,12 @@
     <h1>Office Temperature</h1>
 
     <p class="lead">Temperature in my <mark>cold office</mark> 🌡</p>
-    <p>Last updated {{ today }}</p>
+    {% if triggered_by %}
+    <p>Last updated {{ today }}, trigger by {{ triggered_by }} from branch {{ branch }}</p>
+    {% else %}
+    <p>Last updated {{ today }}, not on ci</p>
+    {% endif %}
+
 
     <iframe id="igraph" scrolling="no" style="border:none;" seamless="seamless" src="plot.html" height="525"
         width="100%"></iframe>
