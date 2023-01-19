@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 
 src/data
+data/
+index.html
+plot.html
