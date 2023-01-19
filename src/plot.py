@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-import requests
-import shutil
-import os
-import re
-from glob import glob
-import pandas as pd
-from io import StringIO
-import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
 import datetime
 import logging
+import os
+import re
+import shutil
+from glob import glob
+from io import StringIO
+
+import pandas as pd
+import plotly.graph_objects as go
+import requests
+from plotly.subplots import make_subplots
 
 logging.basicConfig(encoding="utf-8", level=logging.INFO)
 
@@ -19,7 +19,7 @@ logging.basicConfig(encoding="utf-8", level=logging.INFO)
 LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
 
 
-def get_files():
+def get_files() -> list[str]:
     """get list of csv files from dropbox"""
     DROPBOX_URL = "https://www.dropbox.com/sh/f0j8xol7y0qbeg7/AADTapK4KX_nH-0WyUX67rsJa?dl=1"
 
@@ -33,7 +33,7 @@ def get_files():
     return list_of_files
 
 
-def read_file(filename):
+def read_file(filename: str):
     """read one csv file, returning a pandas.DataFrame"""
     text = open(filename).read()
     text_splitted = re.split("(.+\n[\*,]+\n)", text)
@@ -59,6 +59,7 @@ if __name__ == "__main__":
     logging.info("reading data")
     data = [remove_begin_end(read_file(filename)) for filename in list_of_files]
     data = pd.concat(data)
+    data = data.sort_index()
     print(data.index.min(), data.index.max())
 
     # not plot
