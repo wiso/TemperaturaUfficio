@@ -12,10 +12,12 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import datetime
 import logging
-logging.basicConfig(encoding='utf-8', level=logging.INFO)
+
+logging.basicConfig(encoding="utf-8", level=logging.INFO)
 
 
 LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+
 
 def get_files():
     """get list of csv files from dropbox"""
@@ -50,6 +52,7 @@ def remove_begin_end(df, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelt
     """remove data from beginning and ending"""
     return df[(df.index > df.index.min() + start_delay) & (df.index < df.index.max() - stop_delay)]
 
+
 if __name__ == "__main__":
     logging.info("downloading data")
     list_of_files = get_files()
@@ -61,11 +64,10 @@ if __name__ == "__main__":
     # not plot
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.update_layout(template="plotly_white")
-    # fig.add_trace(
-    #    go.Scatter(x=data.index, y=data.temperature, name="temperature"),
-    #    secondary_y=False,
-    # )
-
+    fig.add_trace(
+        go.Scatter(x=data.index, y=data.temperature, name="temperature"),
+        secondary_y=False,
+    )
 
     fig.add_trace(
         go.Scatter(x=data.index, y=data.humidity, name="humidity"),
@@ -78,9 +80,8 @@ if __name__ == "__main__":
     fig.update_yaxes(title_text="temperature", secondary_y=False)
     fig.update_yaxes(title_text="humidity", secondary_y=True)
 
-
     for v in pd.date_range(data.index.min(), data.index.max(), freq="D", normalize=True)[1:]:
         fig.add_vline(v, line_dash="dot")
 
     logging.info("saving plot")
-    fig.write_html('plot.html')
+    fig.write_html("plot.html")
