@@ -64,27 +64,33 @@ if __name__ == "__main__":
     data = data.sort_index()
     print(data.index.min(), data.index.max())
 
-    # not plot
+    # now plot
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-    fig.update_layout(template="plotly_white")
+    fig.update_layout(template="plotly_dark")
     fig.add_trace(
-        go.Scatter(x=data.index, y=data.temperature, name="temperature"),
-        secondary_y=False,
-    )
-
-    fig.add_trace(
-        go.Scatter(x=data.index, y=data.humidity, name="humidity"),
+        go.Scatter(x=data.index, y=data.humidity, name="humidity", line_color="#202AB6"),
         secondary_y=True,
     )
 
-    fig.update_xaxes(title_text="date")
+    fig.add_trace(
+        go.Scatter(x=data.index, y=data.temperature, name="temperature r", line_color="#EF553B"),
+        secondary_y=False,
+    )
 
-    # Set y-axes titles
-    fig.update_yaxes(title_text="temperature", secondary_y=False)
-    fig.update_yaxes(title_text="humidity", secondary_y=True)
+    fig.update_yaxes(
+        title_text="temperature",
+        secondary_y=False,
+        minor=dict(ticklen=6, tickcolor="white", showgrid=True),
+    )
+    fig.update_yaxes(
+        title_text="humidity",
+        secondary_y=True,
+        showgrid=False,
+        minor=dict(ticklen=6, tickcolor="white", showgrid=False),
+    )
 
     for v in pd.date_range(data.index.min(), data.index.max(), freq="D", normalize=True)[1:]:
-        fig.add_vline(v, line_dash="dot")
+        fig.add_vline(v, line_dash="dot", line_color="#777")
 
     logging.info("saving plot")
     fig.write_html("plot.html")
