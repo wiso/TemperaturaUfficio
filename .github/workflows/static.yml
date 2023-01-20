@@ -35,8 +35,10 @@ jobs:
         continue-on-error: true
         with:
           python-root-list: "src"
-          use-pylint: true
           use-black: true
+          use-pylint: true
+          use-pycodestyle: true
+          use-mypy: true
   deploy:
     environment:
       name: github-pages
