@@ -73,7 +73,7 @@ if __name__ == "__main__":
     )
 
     fig.add_trace(
-        go.Scatter(x=data.index, y=data.temperature, name="temperature r", line_color="#EF553B"),
+        go.Scatter(x=data.index, y=data.temperature, name="temperature", line_color="#EF553B"),
         secondary_y=False,
     )
 
