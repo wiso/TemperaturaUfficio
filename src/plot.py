@@ -17,26 +17,26 @@ logging.basicConfig(encoding="utf-8", level=logging.INFO)
 
 
 LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
+DROPBOX_URL = "https://www.dropbox.com/sh/f0j8xol7y0qbeg7/AADTapK4KX_nH-0WyUX67rsJa?dl=1"
 
 
 def get_files() -> list[str]:
     """get list of csv files from dropbox"""
-    DROPBOX_URL = "https://www.dropbox.com/sh/f0j8xol7y0qbeg7/AADTapK4KX_nH-0WyUX67rsJa?dl=1"
 
     response = requests.get(DROPBOX_URL, timeout=20)
-    open("data.zip", "wb").write(response.content)
+    with open("data.zip", "wb") as tmp_file:
+        tmp_file.write(response.content)
 
     shutil.unpack_archive("data.zip", "data")
     os.remove("data.zip")
 
-    list_of_files = glob("data/*.csv")
-    return list_of_files
+    return glob("data/*.csv")
 
 
 def read_file(filename: str):
     """read one csv file, returning a pandas.DataFrame"""
     text = open(filename).read()
-    text_splitted = re.split("(.+\n[\*,]+\n)", text)
+    text_splitted = re.split("(.+\n[\\*,]+\n)", text)
     text_splitted = text_splitted[1:]
     data = pd.read_csv(
         StringIO(text_splitted[9]), header=None, parse_dates=[[0, 1]], dayfirst=False
@@ -48,9 +48,11 @@ def read_file(filename: str):
     return data
 
 
-def remove_begin_end(df, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelta("1m")):
+def remove_begin_end(data, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelta("1m")):
     """remove data from beginning and ending"""
-    return df[(df.index > df.index.min() + start_delay) & (df.index < df.index.max() - stop_delay)]
+    return data[
+        (data.index > data.index.min() + start_delay) & (data.index < data.index.max() - stop_delay)
+    ]
 
 
 if __name__ == "__main__":
