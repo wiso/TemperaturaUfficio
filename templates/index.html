@@ -14,8 +14,27 @@
 
 <body>
     <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">Office Temperature</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <h1>Office Temperature</h1>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="https://github.com/wiso/TemperaturaUfficio/" class="nav-link">Code</a>
+                        </li>
+                        <li>
+                        <a href="https://www.dropbox.com/sh/f0j8xol7y0qbeg7/AADTapK4KX_nH-0WyUX67rsJa?dl=0"
+                            class="nav-link">Data</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
         <p class="lead">Temperature in my <mark>cold office</mark> 🌡</p>
 
@@ -26,9 +45,9 @@
             width="100%"></iframe>
     </main>
 
-    <footer class="footer mt-auto pt-3 bg-light text-center text-lg-start">
+    <footer class="footer mt-auto pt-3 bg-dark text-center text-lg-start">
         <div class="container">
-            <span class="text-muted">{% if triggered_by %}
+            <span class="text-light">{% if triggered_by %}
                 <p>Last updated {{ today }}, trigger by {{ triggered_by }} from branch {{ branch }}</p>
                 {% else %}
                 <p>Last updated {{ today }}, not on ci</p>
