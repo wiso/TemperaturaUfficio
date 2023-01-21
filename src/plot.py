@@ -68,13 +68,18 @@ if __name__ == "__main__":
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     fig.update_layout(template="plotly_dark")
     fig.add_trace(
-        go.Scatter(x=data.index, y=data.humidity, name="humidity", line_color="#202AB6"),
-        secondary_y=True,
-    )
-
-    fig.add_trace(
         go.Scatter(x=data.index, y=data.temperature, name="temperature", line_color="#EF553B"),
         secondary_y=False,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=data.index,
+            y=data.humidity,
+            name="humidity",
+            line_color="#202AB6",
+            visible="legendonly",
+        ),
+        secondary_y=True,
     )
 
     fig.update_yaxes(
@@ -110,6 +115,11 @@ if __name__ == "__main__":
 
     for v in pd.date_range(data.index.min(), data.index.max(), freq="D", normalize=True)[1:]:
         fig.add_vline(v, line_dash="dot", line_color="#777")
+
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.0),
+        template="plotly_dark",
+    )
 
     logging.info("saving plot")
     fig.write_html("plot.html")
