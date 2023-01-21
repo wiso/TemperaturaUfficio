@@ -14,6 +14,8 @@ if triggered_by == "push":
     triggered_by = "push on gitlab"
 elif triggered_by == "repository_dispatch":
     triggered_by = "new data"
+elif triggered_by == "workflow_dispatch":
+    triggered_by = "manual build"
 
 html = template.render(
     today="%s" % today.strftime("%d/%m/%Y"),
