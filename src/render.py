@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
-import os
+"""Render the html template and produce the html."""
+
 import datetime
+import os
+
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 env = Environment(loader=FileSystemLoader("templates"), autoescape=select_autoescape())
@@ -18,13 +21,10 @@ elif triggered_by == "workflow_dispatch":
     triggered_by = "manual build"
 
 html = template.render(
-    today="%s" % today.strftime("%d/%m/%Y"),
+    today=today.strftime("%d/%m/%Y"),
     triggered_by=triggered_by,
     branch=os.environ.get("GITHUB_REF_NAME"),
 )
 
 with open("index.html", mode="w", encoding="utf-8") as f:
     f.write(html)
-
-for k, v in os.environ.items():
-    print(k, v)

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""Make the plot downloading data from Dropbox."""
+
 import datetime
 import logging
 import os
@@ -9,8 +11,8 @@ from glob import glob
 from io import StringIO
 
 import pandas as pd
-import plotly.graph_objects as go
 import requests
+from plotly import graph_objects as go
 from plotly.subplots import make_subplots
 
 logging.basicConfig(encoding="utf-8", level=logging.INFO)
@@ -21,8 +23,7 @@ DROPBOX_URL = "https://www.dropbox.com/sh/f0j8xol7y0qbeg7/AADTapK4KX_nH-0WyUX67r
 
 
 def get_files() -> list[str]:
-    """get list of csv files from dropbox"""
-
+    """Return a list of csv files from dropbox."""
     response = requests.get(DROPBOX_URL, timeout=20)
     with open("data.zip", "wb") as tmp_file:
         tmp_file.write(response.content)
@@ -34,24 +35,23 @@ def get_files() -> list[str]:
 
 
 def read_file(filename: str):
-    """read one csv file, returning a pandas.DataFrame"""
+    """Read one csv file, returning a pandas.DataFrame."""
     text = open(filename).read()
     text_splitted = re.split("(.+\n[\\*,]+\n)", text)
     text_splitted = text_splitted[1:]
-    data = pd.read_csv(
+    sensor_data = pd.read_csv(
         StringIO(text_splitted[9]), header=None, parse_dates=[[0, 1]], dayfirst=False
     )
-    data.columns = ["date", "temperature", "humidity"]
-    data = data.set_index("date")
-    data = data.tz_localize("UTC")
-    data = data.tz_convert(LOCAL_TIMEZONE)
-    return data
+    sensor_data.columns = ["date", "temperature", "humidity"]
+    sensor_data.set_index("date").tz_localize("UTC").tz_convert(LOCAL_TIMEZONE)
+    return sensor_data
 
 
-def remove_begin_end(data, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelta("1m")):
-    """remove data from beginning and ending"""
-    return data[
-        (data.index > data.index.min() + start_delay) & (data.index < data.index.max() - stop_delay)
+def remove_begin_end(sensor_data, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelta("1m")):
+    """Remove data from beginning and ending."""
+    return sensor_data[
+        (sensor_data.index > sensor_data.index.min() + start_delay)
+        & (sensor_data.index < sensor_data.index.max() - stop_delay)
     ]
 
 
