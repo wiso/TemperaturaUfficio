@@ -79,14 +79,33 @@ if __name__ == "__main__":
 
     fig.update_yaxes(
         title_text="temperature",
+        ticklen=10,
+        linewidth=1,
+        linecolor="white",
+        tickcolor="white",
+        ticks="inside",
         secondary_y=False,
-        minor=dict(ticklen=6, tickcolor="white", showgrid=True),
+        mirror=True,
+        showline=True,
+        minor=dict(ticklen=6, tickcolor="white", ticks="inside", showgrid=True),
     )
     fig.update_yaxes(
         title_text="humidity",
+        ticklen=10,
+        tickcolor="white",
+        ticks="inside",
         secondary_y=True,
         showgrid=False,
-        minor=dict(ticklen=6, tickcolor="white", showgrid=False),
+        minor=dict(ticklen=6, tickcolor="white", ticks="inside", showgrid=False),
+    )
+    fig.update_xaxes(
+        ticklen=10,
+        linewidth=1,
+        linecolor="white",
+        tickcolor="white",
+        ticks="inside",
+        showline=True,
+        mirror="all",
     )
 
     for v in pd.date_range(data.index.min(), data.index.max(), freq="D", normalize=True)[1:]:
