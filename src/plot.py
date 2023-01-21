@@ -101,8 +101,10 @@ if __name__ == "__main__":
         ticks="inside",
         secondary_y=True,
         showgrid=False,
+        zeroline=False,
         minor=dict(ticklen=6, tickcolor="white", ticks="inside", showgrid=False),
     )
+
     fig.update_xaxes(
         ticklen=10,
         linewidth=1,
