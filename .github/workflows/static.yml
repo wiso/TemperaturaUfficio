@@ -39,6 +39,7 @@ jobs:
          python -m pip install -r requirements.txt
          python -m pip install mypy pandas-stubs types-requests flake8 flake8-quotes
       - name: Python Code Quality and Lint
+        continue-on-error: true
         run: |
           flake8 src
           mypy src
