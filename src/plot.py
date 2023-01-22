@@ -12,8 +12,8 @@ from io import StringIO
 
 import pandas as pd
 import requests
-from plotly import graph_objects as go
-from plotly.subplots import make_subplots
+from plotly import graph_objects as go  # type: ignore
+from plotly.subplots import make_subplots  # type: ignore
 
 logging.basicConfig(encoding="utf-8", level=logging.INFO)
 
@@ -40,11 +40,17 @@ def read_file(filename: str):
     text_splitted = re.split("(.+\n[\\*,]+\n)", text)
     text_splitted = text_splitted[1:]
     sensor_data = pd.read_csv(
-        StringIO(text_splitted[9]), header=None, parse_dates=[[0, 1]], dayfirst=False
+        StringIO(text_splitted[9]),
+        header=None,
+        parse_dates=[[0, 1]],
+        dayfirst=False,
     )
-    sensor_data.columns = ["date", "temperature", "humidity"]
-    sensor_data.set_index("date").tz_localize("UTC").tz_convert(LOCAL_TIMEZONE)
-    return sensor_data
+    return (
+        sensor_data.set_axis(["date", "temperature", "humidity"], axis="columns")
+        .set_index("date")
+        .tz_localize("UTC")
+        .tz_convert(LOCAL_TIMEZONE)
+    )
 
 
 def remove_begin_end(sensor_data, start_delay=pd.Timedelta("20m"), stop_delay=pd.Timedelta("1m")):
@@ -59,8 +65,7 @@ if __name__ == "__main__":
     logging.info("downloading data")
     list_of_files = get_files()
     logging.info("reading data")
-    data = [remove_begin_end(read_file(filename)) for filename in list_of_files]
-    data = pd.concat(data)
+    data = pd.concat([remove_begin_end(read_file(filename)) for filename in list_of_files])
     data = data.sort_index()
     print(data.index.min(), data.index.max())
 
