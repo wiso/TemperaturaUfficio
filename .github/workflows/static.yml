@@ -37,7 +37,7 @@ jobs:
       - name: Install Python Packages
         run: |
          python -m pip install -r requirements.txt
-         python -m pip install mypy pandas-stubs flake8 flake8-quotes
+         python -m pip install mypy pandas-stubs types-requests flake8 flake8-quotes
       - name: Python Code Quality and Lint
         run: |
           flake8 src
