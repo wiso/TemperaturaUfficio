@@ -30,15 +30,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Python Code Quality and Lint
-        uses: ricardochaves/python-lint@v1.3.0
-        continue-on-error: true
+      - uses: actions/setup-python@v4
         with:
-          python-root-list: "src"
-          use-black: true
-          use-pylint: true
-          use-pycodestyle: true
-          use-mypy: true
+          python-version: "3.9"
+          cache: "pip" # caching pip dependencies
+      - name: Install Python Packages
+        run: |
+         python -m pip install -r requirements.txt
+         python -m pip install mypy flake8 pandas-stubs flake8-quotes
+      - name: Python Code Quality and Lint
+        run: |
+          black src --check
+          flake8 src
   deploy:
     environment:
       name: github-pages
