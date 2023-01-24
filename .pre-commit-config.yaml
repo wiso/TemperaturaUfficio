@@ -12,3 +12,22 @@ repos:
     -   id: check-shebang-scripts-are-executable
     -   id: double-quote-string-fixer
     -   id: mixed-line-ending
+
+
+# If you want to avoid flake8 errors due to unused vars or imports:
+- repo: https://github.com/PyCQA/autoflake
+  rev: v2.0.0
+  hooks:
+  - id: autoflake
+    args: [
+      --in-place,
+      --remove-all-unused-imports,
+      --remove-unused-variables,
+    ]
+
+- repo: https://github.com/PyCQA/flake8
+  rev: 5.0.4
+  hooks:
+  - id: flake8
+  ## You can add flake8 plugins via `additional_dependencies`:
+  #  additional_dependencies: [flake8-bugbear]
