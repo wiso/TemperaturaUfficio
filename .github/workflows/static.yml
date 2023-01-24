@@ -41,7 +41,7 @@ jobs:
       - name: Python Code Quality and Lint
         continue-on-error: true
         run: |
-          pipx run pre-commit run --all-files
+          pipx run pre-commit run --all-files --show-diff-on-failure
           flake8 src
           mypy src
   deploy:
