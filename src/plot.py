@@ -15,7 +15,7 @@ import requests
 from plotly import graph_objects as go  # type: ignore
 from plotly.subplots import make_subplots  # type: ignore
 
-logging.basicConfig(encoding='utf-8', level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
 LOCAL_TIMEZONE = datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo
@@ -34,9 +34,10 @@ def get_files() -> list[str]:
     return glob('data/*.csv')
 
 
-def read_file(filename: str):
+def read_file(filename: str) -> pd.DataFrame:
     """Read one csv file, returning a pandas.DataFrame."""
-    text = open(filename).read()
+    with open(filename, 'r', encoding='utf8') as data_file:
+        text = data_file.read()
     text_splitted = re.split('(.+\n[\\*,]+\n)', text)
     text_splitted = text_splitted[1:]
     sensor_data = pd.read_csv(
@@ -53,7 +54,9 @@ def read_file(filename: str):
     )
 
 
-def remove_begin_end(sensor_data, start_delay=pd.Timedelta('20m'), stop_delay=pd.Timedelta('1m')):
+def remove_begin_end(
+    sensor_data: pd.DataFrame, start_delay=pd.Timedelta('20m'), stop_delay=pd.Timedelta('1m')
+) -> pd.DataFrame:
     """Remove data from beginning and ending."""
     return sensor_data[
         (sensor_data.index > sensor_data.index.min() + start_delay)

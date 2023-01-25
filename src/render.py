@@ -13,12 +13,12 @@ template = env.get_template('index.html')
 
 today = datetime.datetime.today()
 triggered_by = os.environ.get('GITHUB_EVENT_NAME')
-if triggered_by == 'push':
-    triggered_by = 'push on gitlab'
-elif triggered_by == 'repository_dispatch':
-    triggered_by = 'new data'
-elif triggered_by == 'workflow_dispatch':
-    triggered_by = 'manual build'
+if triggered_by is not None:
+    triggered_by = {
+        'push': 'push on gitlab',
+        'repository_dispatch': 'new_data',
+        'workflow_dispatch': 'manual build',
+    }.get(triggered_by, triggered_by)
 
 html = template.render(
     today=today.strftime('%d/%m/%Y'),

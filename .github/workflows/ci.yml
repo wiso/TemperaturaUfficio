@@ -44,7 +44,7 @@ jobs:
           path: /opt/pipx
           key: ${{ runner.os }}
       - name: Pre-commits
-        run: pipx run pre-commit run --all-files --show-diff-on-failure
+        run: pipx run --spec pylint pre-commit run --all-files --show-diff-on-failure
       - name: ls
         run: pipx environment
       - name: Flake8 manual
