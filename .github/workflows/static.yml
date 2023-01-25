@@ -41,12 +41,12 @@ jobs:
       - uses: actions/cache@v3
         id: cache-pix
         with:
-          path: ${{ github.workspace }}/.pipx_
+          path: ${{ github.workspace }}/.pipx
           key: ${{ runner.os }}
       - name: Pre-commits
         run: pipx run pre-commit run --all-files --show-diff-on-failure
       - name: ls
-        run: ls -ltra ${{ github.workspace }}
+        run: pipx environment
       - name: Flake8 manual
         run: flake8 src
       - name: mypy manual
