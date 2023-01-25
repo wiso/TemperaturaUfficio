@@ -37,20 +37,14 @@ jobs:
       - name: Install Python Packages
         run: |
           python -m pip install -r requirements.txt
-          python -m pip install mypy pandas-stubs types-requests flake8 flake8-quotes
+          python -m pip install pandas-stubs types-requests pylint
       - uses: actions/cache@v3
         id: cache-pipx
         with:
           path: /opt/pipx
           key: ${{ runner.os }}
       - name: Pre-commits
-        run: pipx run --spec pylint pre-commit run --all-files --show-diff-on-failure
-      - name: ls
-        run: pipx environment
-      - name: Flake8 manual
-        run: flake8 src
-      - name: mypy manual
-        run: mypy src
+        run: pipx run pre-commit run --all-files --show-diff-on-failure
   deploy:
     environment:
       name: github-pages
