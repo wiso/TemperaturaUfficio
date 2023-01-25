@@ -31,3 +31,23 @@ repos:
   - id: flake8
   ## You can add flake8 plugins via `additional_dependencies`:
   #  additional_dependencies: [flake8-bugbear]
+
+- repo: local
+  hooks:
+    - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+      args:
+        [
+          "-rn", # Only display messages
+          "-sn", # Don't display the score
+        ]
+
+
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v0.902
+  hooks:
+    - id: mypy
+      additional_dependencies: [types-requests, pandas-stubs, Jinja2]
