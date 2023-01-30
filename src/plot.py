@@ -72,6 +72,16 @@ if __name__ == '__main__':
     data = data.sort_index()
     print(data.index.min(), data.index.max())
 
+    mask_working_hours = data.index.time < datetime.time(19, 0, 0)  # type: ignore
+    mask_working_hours &= data.index.time > datetime.time(7, 0, 0)  # type: ignore
+    mask_working_hours &= data.index.weekday < 5  # type: ignore
+
+    data_working = data[mask_working_hours]
+
+    df = data_working.groupby(data_working.index.date)['temperature'].agg(
+        [min, max, 'first', 'last']
+    )
+
     # now plot
     fig = make_subplots(specs=[[{'secondary_y': True}]])
     fig.update_layout(template='plotly_dark')
@@ -88,6 +98,16 @@ if __name__ == '__main__':
             visible='legendonly',
         ),
         secondary_y=True,
+    )
+    fig.add_trace(
+        go.Candlestick(
+            x=pd.DatetimeIndex(df.index) + datetime.timedelta(hours=13),  # type: ignore
+            close=df['max'],
+            open=df['min'],
+            high=df['max'],
+            low=df['min'],
+            name='Min/Max in working days 7-19',
+        )
     )
 
     fig.update_yaxes(
@@ -129,6 +149,7 @@ if __name__ == '__main__':
     fig.update_layout(
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='left', x=0.0),
         template='plotly_dark',
+        xaxis_rangeslider_visible=False,
     )
 
     logging.info('saving plot')
