@@ -120,7 +120,12 @@ if __name__ == '__main__':
         secondary_y=False,
         mirror=True,
         showline=True,
-        minor=dict(ticklen=6, tickcolor='white', ticks='inside', showgrid=True),
+        minor={
+            'ticklen': 6,
+            'tickcolor': 'white',
+            'ticks': 'inside',
+            'showgrid': True,
+        },
     )
     fig.update_yaxes(
         title_text='humidity',
@@ -130,7 +135,7 @@ if __name__ == '__main__':
         secondary_y=True,
         showgrid=False,
         zeroline=False,
-        minor=dict(ticklen=6, tickcolor='white', ticks='inside', showgrid=False),
+        minor={'ticklen': 6, 'tickcolor': 'white', 'ticks': 'inside', 'showgrid': True},
     )
 
     fig.update_xaxes(
