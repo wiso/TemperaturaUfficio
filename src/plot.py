@@ -152,7 +152,7 @@ if __name__ == '__main__':
         fig.add_vline(v, line_dash='dot', line_color='#777')
 
     fig.update_layout(
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='left', x=0.0),
+        legend={'orientation': 'h', 'yanchor': 'bottom', 'y': 1.02, 'xanchor': 'left', 'x': 0.0},
         template='plotly_dark',
         xaxis_rangeslider_visible=False,
     )
