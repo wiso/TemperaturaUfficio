@@ -1,6 +1,6 @@
 # TemperaturaUfficio
 
-[![Deploy static content to Pages](https://github.com/wiso/TemperaturaUfficio/actions/workflows/static.yml/badge.svg)](https://github.com/wiso/TemperaturaUfficio/actions/workflows/static.yml)
+[![Deploy static content to Pages](https://github.com/wiso/TemperaturaUfficio/actions/workflows/ci.yml/badge.svg)](https://github.com/wiso/TemperaturaUfficio/actions/workflows/static.yml)
 
 Repository to produce plots about temperature in my office.
 
