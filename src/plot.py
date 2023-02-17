@@ -64,6 +64,29 @@ def remove_begin_end(
     ]
 
 
+def get_weather_data():
+    """get weather data from open meteo"""
+    response = requests.get(
+        'https://api.open-meteo.com/v1/forecast',
+        params={
+            'latitude': 45.476,
+            'longitude': 9.23,
+            'hourly': ['temperature_2m', 'precipitation'],
+            'timezone': 'UTC',
+            'start_date': '2023-01-01',
+            'end_date': datetime.date.today().isoformat(),
+        },
+        timeout=60,
+    )
+    weather_data = response.json()
+
+    df_weather_data = pd.DataFrame(weather_data['hourly'])
+    df_weather_data['time'] = pd.to_datetime(df_weather_data['time']).dt.tz_localize(
+        df_weather_data['timezone']
+    )
+    return df_weather_data.set_index('time')
+
+
 if __name__ == '__main__':
     logging.info('downloading data')
     list_of_files = get_files()
@@ -71,6 +94,11 @@ if __name__ == '__main__':
     data = pd.concat([remove_begin_end(read_file(filename)) for filename in list_of_files])
     data = data.sort_index()
     print(data.index.min(), data.index.max())
+
+    df_weather = get_weather_data().sort_index()
+    df_weather = df_weather.loc[
+        (df_weather.index > data.index.min()) & (df_weather.index < data.index.max())
+    ]
 
     mask_working_hours = data.index.time < datetime.time(19, 0, 0)  # type: ignore
     mask_working_hours &= data.index.time > datetime.time(7, 0, 0)  # type: ignore
@@ -107,6 +135,15 @@ if __name__ == '__main__':
             high=df['max'],
             low=df['min'],
             name='Min/Max in working days 7-19',
+        )
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=df_weather.index,
+            y=df_weather['temperature_2m'],
+            visible='legendonly',
+            name='ext temperature',
         )
     )
 
