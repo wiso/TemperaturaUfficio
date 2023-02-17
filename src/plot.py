@@ -82,7 +82,7 @@ def get_weather_data():
 
     df_weather_data = pd.DataFrame(weather_data['hourly'])
     df_weather_data['time'] = pd.to_datetime(df_weather_data['time']).dt.tz_localize(
-        df_weather_data['timezone']
+        weather_data['timezone']
     )
     return df_weather_data.set_index('time')
 
