@@ -48,7 +48,7 @@ def read_file(filename: str) -> pd.DataFrame:
     )
     return (
         sensor_data.set_axis(['date', 'temperature', 'humidity'], axis='columns')
-        .set_index('date')
+        .set_index(['date'])
         .tz_localize('UTC')
         .tz_convert(LOCAL_TIMEZONE)
     )
