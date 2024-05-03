@@ -74,8 +74,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "_site"
-          if-no-files-found: error
           retention-days: 5
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
